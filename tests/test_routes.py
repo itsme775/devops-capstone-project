@@ -22,6 +22,7 @@ BASE_URL = "/accounts"
 
 HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 
+
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
@@ -126,15 +127,15 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-
     # ADD YOUR TEST CASES HERE ...
+
     def test_list_all(self):
         """It should list all accounts found, even if empty"""
         self._create_accounts(5)
         resp = self.client.get(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
-        self.assertEqual(len(data),5)
+        self.assertEqual(len(data), 5)
 
     def test_read_an_account(self):
         """It should read a single account"""
@@ -148,7 +149,7 @@ class TestAccountService(TestCase):
 
     def test_get_account_not_found(self):
         """It shouldn't read an account that can't be found"""
-        resp=self.client.get(f"{BASE_URL}/0")
+        resp = self.client.get(f"{BASE_URL}/0")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_account(self):
@@ -158,10 +159,10 @@ class TestAccountService(TestCase):
         resp = self.client.post(BASE_URL, json=test_account.serialize())
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        #update the account
+        # update the account
         new_account = resp.get_json()
         new_account["name"] = "Something new"
-        resp = self.client.put(f"{BASE_URL}/{new_account['id']}", json = new_account)
+        resp = self.client.put (f"{BASE_URL}/{new_account['id']}", json = new_account)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "Something new")
@@ -205,4 +206,4 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Check for the CORS header
         self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
-            
+  
